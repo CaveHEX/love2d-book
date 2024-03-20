@@ -16,8 +16,8 @@ end
 
 function agent_t:update(dt)
     self.vel = self.vel + self.acc
-    self.vel = self.vel * self.friction * dt
-    self.pos = self.pos + self.vel
+    self.vel = self.vel * self.friction
+    self.pos = self.pos + self.vel * dt
     self.acc = self.acc * 0.0
 end
 
