@@ -1,5 +1,24 @@
+local vector_t = require("vector_t")
+local cell_t = require("cell_t")
+local tools = require("tools")
+
 local gol_t = {}
 gol_t.__index = gol_t
+
+function gol_t.init_cells(div)
+    local cells = {}
+
+    for x=0, div.x do
+        for y=0, div.y do
+            table.insert(cells, cell_t.new(
+                vector_t.new(x, y),
+                tools.fif(love.math.random() < 0.5, 1, 0)
+            ))
+        end
+    end
+
+    return cells
+end
 
 function get_index(x, y, div) return 1 + x + y * div.x end
 
@@ -18,19 +37,20 @@ function get_neighbour_count(cells_source, x, y, div)
     return count
 end
 
-function gol_t.update(cells_source, cells_destination, div)
-    for x=0, div.x do
-        for y=0, div.y do
-            local neighbours = get_neighbour_count(cells_source, x, y, div)
+-- function gol_t.update(cells_source, cells_destination, div)
+--     for x=0, div.x do
+--         for y=0, div.y do
+--             local neighbours = get_neighbour_count(cells_source, x, y, div)
 
-                if cells_source[get_index(x, y, div)].state == 1 then
-        if neighbours < 2 or neighbours > 3 then
-            cells_destination[get_index(x, y, div)].state = 0
-        else
-            cells_destination[get_index(x, y, div)].state = 1
-        end
-    end
-end
+--                 if cells_source[get_index(x, y, div)].state == 1 then
+--             if neighbours < 2 or neighbours > 3 then
+--                 cells_destination[get_index(x, y, div)].state = 0
+--             else
+--                 cells_destination[get_index(x, y, div)].state = 1
+--             end
+--         end
+--     end
+-- end
 
 
 
