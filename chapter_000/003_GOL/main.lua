@@ -5,13 +5,14 @@ local tools = require("tools")
 
 local cells = {}
 local cells_spare = {}
-local dim = vector_t.new(500, 500)
-local div = vector_t.new(50, 50)
+local dim = vector_t.new(1000, 1000)
+local div = vector_t.new(250, 250)
 local step = vector_t.new(
     dim.x / div.x,
     dim.y / div.y
 )
 local t = 0
+local iter = 0
 
 
 function love.load()
@@ -22,7 +23,7 @@ function love.load()
 
     love.graphics.setBackgroundColor(0, 0, 0.1)
 
-    cells = gol_t.init_cells(div)
+    cells = gol_t.init_cells(div, "random")
 
     shader_rainbow = love.graphics.newShader [[
         extern number t;
@@ -42,12 +43,18 @@ end
 function love.update(dt)
     t = t + dt
     shader_rainbow:send('t', t)
+
+    iter = iter + 1
+    if iter % 5 == 0 then
+        cells = gol_t.update(cells, div)
+    end
 end
+
 
 function love.draw()
     for x=0, div.x do
         for y=0, div.y do
-            local cell = cells[1 + x + y * div.x]
+            local cell = cells[gol_t.get_index(x, y, div)]
             if cell.state > 0 then
                 local bounds = cell:bounds(dim, div)
                 love.graphics.rectangle("fill", bounds.x, bounds.y, step.x, step.y)
