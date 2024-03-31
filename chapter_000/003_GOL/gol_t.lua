@@ -26,7 +26,7 @@ function gol_t.init_cells(div, config)
     return cells
 end
 
-function gol_t.get_index(x, y, div) return 1 + x + y * div.x end
+function gol_t.get_index(x, y, div) return 1 + x + (y * (div.x+1)) end
 
 function get_neighbour_count(cells, x, y, div)
     local count = 0
@@ -44,6 +44,7 @@ function get_neighbour_count(cells, x, y, div)
     if cells[gol_t.get_index(x + 1, y, div)].state == 1     then count = count + 1 end
     if cells[gol_t.get_index(x, y - 1, div)].state == 1     then count = count + 1 end
     if cells[gol_t.get_index(x, y + 1, div)].state == 1     then count = count + 1 end
+    
     if cells[gol_t.get_index(x - 1, y - 1, div)].state == 1 then count = count + 1 end
     if cells[gol_t.get_index(x + 1, y - 1, div)].state == 1 then count = count + 1 end
     if cells[gol_t.get_index(x - 1, y + 1, div)].state == 1 then count = count + 1 end
@@ -63,7 +64,6 @@ function gol_t.update(cells_source, div)
             local neighbours = get_neighbour_count(cells_source, x, y, div)
             local idx = gol_t.get_index(x, y, div)
             local state = cells_source[idx].state
-
 
 
             if state == 1 and (neighbours == 2 or neighbours == 3) then
